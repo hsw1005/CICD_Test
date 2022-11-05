@@ -2,24 +2,46 @@ pipeline{
     agent any
     
     // environment{
-    //     //github_credentials = credentials("github_credentials")
+    //
     // }
     
     stages{
-        stage("print"){
+        stage("pre-stage, version check"){
             steps{
-                echo 'hi'
+                cleanWs()
+                sh 'pwd'
                 sh 'java -version'
+                sh 'gradle -v'
+                sh 'whoami'
             }
         }
         stage("Git Clone"){
             steps{
                 git url: "https://github.com/hsw1005/CICD_Test.git",
                 branch: "main",
-                credentialsId: "github_credentials_http"
+                credentialsId: "github_credentials"
                 
                 sh 'ls -alh'
             }
         }
+        stage("Gradle Build"){
+            steps{
+                script{
+                    try{
+                        sh 'gradle build'
+                    }
+                    catch(e){
+                        sh 'Gradle Build Stage Failed!'
+                    }
+                }
+                sh 'ls -alh'
+            }
+        }
+//         stage("Dockerize"){
+//             steps{
+//                 docker.withRegistry()
+//             }
+//         }
+        
     }
 }
