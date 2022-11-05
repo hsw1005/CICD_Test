@@ -31,7 +31,7 @@ pipeline{
                         sh 'gradle build'
                     }
                     catch(e){
-                        sh 'Gradle Build Stage Failed!'
+                        echo 'Gradle Build Stage Failed!'
                     }
                 }
                 sh 'ls -alh'
